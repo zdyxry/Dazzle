@@ -1,0 +1,614 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* 日记账样式优化 */
+.journal-entry {
+  @apply py-3 border-b border-border/50 last:border-0;
+}
+
+.journal-entry:hover {
+  @apply bg-muted/30;
+}
+
+/* 金额颜色 */
+.amount-positive {
+  @apply text-emerald-600;
+}
+
+.amount-negative {
+  @apply text-red-600;
+}
+
+/* 账户树样式 */
+.account-tree-row {
+  @apply transition-colors;
+}
+
+.account-tree-row:hover {
+  @apply bg-muted/50;
+}
+
+/* Fava journal table styling */
+.journal-table,
+.prose table {
+  @apply w-full text-sm;
+}
+
+.prose table thead tr,
+.journal-table thead tr {
+  @apply border-b;
+}
+
+.prose table th,
+.journal-table th {
+  @apply text-left py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider whitespace-nowrap;
+}
+
+.prose table td,
+.journal-table td {
+  @apply py-2 px-3 border-b border-border/50;
+}
+
+.prose table tr:hover td,
+.journal-table tr:hover td {
+  @apply bg-muted/30;
+}
+
+/* Fava journal table styles - based on fava's journal-table.css */
+.journal {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.journal p,
+.journal dl {
+  margin: 0;
+  padding: 0;
+}
+
+/* Journal entry container */
+.journal > li {
+  border-bottom: 1px solid hsl(var(--border) / 0.5);
+  padding: 0.25rem 0;
+}
+
+.journal > li:last-child {
+  border-bottom: none;
+}
+
+/* Journal entry row */
+.journal > li > p {
+  display: flex;
+  align-items: baseline;
+  min-height: 1.75rem;
+  transition: background-color 0.15s ease;
+  flex-wrap: nowrap;
+}
+
+.journal > li:hover {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
+/* Date cell */
+.journal .datecell {
+  width: 6.5rem;
+  flex-shrink: 0;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+}
+
+.journal .datecell a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.journal .datecell a:hover {
+  color: hsl(var(--primary));
+}
+
+/* Flag cell */
+.journal .flag {
+  width: 2.5rem;
+  flex-shrink: 0;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  padding: 0.25rem;
+}
+
+/* Description - takes remaining space */
+.journal > li > p .description {
+  flex: 1 1 auto;
+  min-width: 8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.25rem 0.5rem;
+}
+
+/* 主交易行的账户链接样式 */
+.journal > li > p .description a {
+  font-weight: 500;
+}
+
+.journal .payee {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.journal .description .separator::before {
+  content: "•";
+  padding: 0 0.5rem;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Tags and links */
+.journal .tag,
+.journal .link {
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.journal .tag {
+  color: hsl(var(--primary));
+}
+
+.journal .tag::before {
+  content: "#";
+}
+
+.journal .link {
+  color: hsl(var(--primary) / 0.8);
+}
+
+.journal .link::before {
+  content: "^";
+}
+
+/* Indicators (metadata, posting flags) */
+.journal .indicators {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  flex-shrink: 0;
+  max-width: 6rem;
+}
+
+.journal .indicators span {
+  width: 6px;
+  height: 6px;
+  background-color: hsl(var(--muted-foreground) / 0.5);
+  border-radius: 3px;
+}
+
+.journal .indicators .metadata-indicator {
+  height: 16px;
+  padding: 0 6px;
+  font-size: 10px;
+  line-height: 16px;
+  color: white;
+  background-color: hsl(var(--primary) / 0.6);
+  border-radius: 10px;
+  text-transform: lowercase;
+}
+
+/* Number columns - right aligned */
+.journal .num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  text-align: right;
+  white-space: nowrap;
+  padding: 0.25rem 0.5rem;
+  width: 8rem;
+  flex-shrink: 0;
+  border-left: 1px solid hsl(var(--border) / 0.3);
+}
+
+.journal .change {
+  font-weight: 500;
+}
+
+/* Postings (sub-entries) - 合并为单行显示 */
+.journal .postings {
+  display: block;
+  background-color: transparent;
+  font-size: 0.75em;
+  padding: 0.125rem 0.5rem 0.25rem 9rem;
+  margin-top: 0;
+}
+
+.journal .postings ul {
+  display: inline;
+}
+
+.journal .postings li {
+  display: inline;
+  border-bottom: none;
+}
+
+.journal .postings li:not(:last-child)::after {
+  content: " → ";
+  color: hsl(var(--muted-foreground) / 0.5);
+  margin: 0 0.25rem;
+}
+
+.journal .postings p {
+  display: inline;
+  min-height: auto;
+  padding-left: 0;
+}
+
+/* Postings 中的账户链接样式 */
+.journal .postings .description {
+  display: inline;
+  flex: none;
+  min-width: auto;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.journal .postings .description a {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.9em;
+}
+
+.journal .postings .description a:hover {
+  color: hsl(var(--primary));
+}
+
+/* Postings 中的日期和标记列隐藏 */
+.journal .postings .datecell,
+.journal .postings .flag,
+.journal .postings .indicators {
+  display: none;
+}
+
+/* Postings 中的金额样式 - 简化显示 */
+.journal .postings .num {
+  display: inline;
+  width: auto;
+  min-width: auto;
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground) / 0.8);
+  padding: 0;
+  text-align: left;
+  border-left: none;
+  margin-left: 0.25rem;
+}
+
+/* Postings 中的 indicators 隐藏 */
+.journal .postings .indicators {
+  display: none;
+}
+
+/* Metadata */
+.journal .metadata {
+  display: none;
+  font-size: 0.85em;
+  background-color: hsl(var(--muted) / 0.2);
+  padding: 0.25rem 0;
+}
+
+.journal li.show-full-entry .metadata {
+  display: block;
+}
+
+.journal .metadata dl {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0.125rem 0;
+}
+
+.journal .metadata dt {
+  width: 6rem;
+  flex-shrink: 0;
+  padding: 0.125rem 0.5rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+}
+
+.journal .metadata dd {
+  flex: 1;
+  min-width: 0;
+  padding: 0.125rem 0.5rem;
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+}
+
+/* Entry type indicators (left border) */
+.journal > li {
+  position: relative;
+}
+
+.journal > li.transaction::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: hsl(var(--primary) / 0.3);
+}
+
+.journal > li.open::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: hsl(142 76% 36%);
+}
+
+.journal > li.close::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: hsl(0 84% 60%);
+}
+
+.journal > li.balance::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: hsl(217 91% 60%);
+}
+
+.journal > li.note::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: hsl(45 93% 47%);
+}
+
+.journal > li.document::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: hsl(271 91% 65%);
+}
+
+/* Pad 和 Balance 记录组合样式 - 让相关联的记录视觉上更紧密 */
+.journal > li.pad {
+  padding-bottom: 0.125rem;
+}
+
+.journal > li.balance:has(+ li.pad),
+.journal > li.pad:has(+ li.balance) {
+  border-bottom: 1px dashed hsl(var(--border) / 0.3);
+}
+
+.journal > li.balance + li.pad,
+.journal > li.pad + li.balance {
+  border-top: none;
+  padding-top: 0.125rem;
+}
+
+/* 自动生成的 balance 记录使用淡化样式 */
+.journal > li.balance {
+  opacity: 0.85;
+}
+
+.journal > li.balance .description {
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+/* Transaction status colors */
+.journal > li.transaction.cleared .flag {
+  color: hsl(142 76% 36%);
+  font-weight: 600;
+}
+
+.journal > li.transaction.pending .flag {
+  color: hsl(45 93% 47%);
+}
+
+/* Amount colors */
+.journal .num.positive {
+  color: hsl(142 76% 36%);
+}
+
+.journal .num.negative {
+  color: hsl(0 84% 60%);
+}
+
+/* Account links */
+.journal a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
+
+.journal a:hover {
+  text-decoration: underline;
+}
+
+/* Touch-friendly styles */
+@layer base {
+  /* Minimum touch target size (44x44px) */
+  button,
+  [role="button"],
+  a,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Remove tap highlight on mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Prevent text selection on UI elements */
+  button,
+  [role="button"],
+  nav {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  /* Larger touch targets on mobile */
+  button,
+  [role="button"],
+  .btn {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Increase font size for better readability */
+  body {
+    font-size: 16px; /* Prevents iOS zoom on input focus */
+  }
+  
+  /* Adjust padding for mobile */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Journal table mobile adjustments */
+  .journal > li > p {
+    flex-wrap: wrap;
+  }
+
+  .journal .description {
+    order: 1;
+    width: 100%;
+    flex: none;
+  }
+
+  .journal .num {
+    width: auto;
+    min-width: 6rem;
+  }
+  
+  /* Improve table scrolling on mobile */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Safe area insets for notched devices */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Dark mode support for PWA */
+@media (prefers-color-scheme: dark) {
+  meta[name="theme-color"] {
+    content: "#0f172a";
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  meta[name="theme-color"] {
+    content: "#ffffff";
+  }
+}
