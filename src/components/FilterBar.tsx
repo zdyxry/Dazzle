@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, Filter, X } from 'lucide-react';
+import { Calendar, Filter, X, Wallet } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Badge } from './ui/badge';
@@ -91,7 +91,7 @@ export function FilterBar() {
       )}
 
       {/* 筛选输入区 - 始终展开 */}
-      <div className="flex flex-wrap items-center gap-2 p-3 bg-card border rounded-lg">
+      <div className="flex flex-wrap items-center gap-2 p-2 sm:p-3 bg-card border rounded-lg">
         <div className="flex items-center gap-2 flex-1 min-w-[200px]">
           <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
           <Input
@@ -105,6 +105,7 @@ export function FilterBar() {
         </div>
 
         <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+          <Wallet className="h-4 w-4 text-muted-foreground shrink-0" aria-hidden="true" />
           <AccountPicker
             accounts={accounts}
             value={accountFilter}
@@ -126,8 +127,8 @@ export function FilterBar() {
           />
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button size="sm" onClick={applyFilters}>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <Button size="sm" onClick={applyFilters} className="w-full sm:w-auto">
             应用
           </Button>
         </div>
