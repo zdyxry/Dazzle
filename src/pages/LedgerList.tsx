@@ -179,7 +179,7 @@ export function LedgerList() {
             <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">F</span>
             </div>
-            <span className="font-semibold">Fava UI</span>
+            <span className="font-semibold">Dazzle</span>
           </div>
           <ThemeToggle />
         </header>
@@ -189,7 +189,7 @@ export function LedgerList() {
             <CardContent className="pt-6 text-center space-y-4">
               <AlertCircle className="h-12 w-12 text-destructive mx-auto" />
               <div>
-                <h2 className="text-lg font-semibold mb-2">无法连接到 Fava</h2>
+                <h2 className="text-lg font-semibold mb-2">无法连接到后端服务</h2>
                 <p className="text-sm text-muted-foreground">{error}</p>
               </div>
               <div className="flex gap-2 justify-center">
@@ -215,7 +215,7 @@ export function LedgerList() {
           <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
             <span className="text-primary-foreground font-bold text-sm">F</span>
           </div>
-          <span className="font-semibold">Fava UI</span>
+          <span className="font-semibold">Dazzle</span>
         </div>
         <ThemeToggle />
       </header>

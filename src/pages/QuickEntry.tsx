@@ -15,7 +15,7 @@ interface Posting {
   currency: string;
 }
 
-const RECENT_ACCOUNTS_KEY = 'fava-ui-recent-accounts';
+const RECENT_ACCOUNTS_KEY = 'dazzle-recent-accounts';
 const MAX_RECENT = 8;
 
 function getRecentAccounts(): string[] {

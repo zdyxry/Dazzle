@@ -10,9 +10,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Fava Modern UI',
-        short_name: 'Fava UI',
-        description: 'Modern UI for Fava - A web interface for Beancount',
+        name: 'Dazzle',
+        short_name: 'Dazzle',
+        description: 'Dazzle - A modern web interface for Beancount',
         theme_color: '#0f172a',
         background_color: '#ffffff',
         display: 'standalone',

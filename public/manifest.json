@@ -1,7 +1,7 @@
 {
-  "name": "Fava Modern UI",
-  "short_name": "Fava UI",
-  "description": "Modern UI for Fava - A web interface for Beancount",
+  "name": "Dazzle",
+  "short_name": "Dazzle",
+  "description": "Dazzle - A modern web interface for Beancount",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

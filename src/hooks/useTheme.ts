@@ -4,7 +4,7 @@ type Theme = 'light' | 'dark' | 'system';
 
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem('fava-ui-theme') as Theme;
+    const stored = localStorage.getItem('dazzle-theme') as Theme;
     return stored || 'system';
   });
 
@@ -29,7 +29,7 @@ export function useTheme() {
     };
 
     applyTheme(theme);
-    localStorage.setItem('fava-ui-theme', theme);
+    localStorage.setItem('dazzle-theme', theme);
 
     if (theme === 'system') {
       const mq = window.matchMedia('(prefers-color-scheme: dark)');

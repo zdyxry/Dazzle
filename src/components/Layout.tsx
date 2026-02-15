@@ -101,7 +101,7 @@ export function Layout() {
             <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">F</span>
             </div>
-            <span className="font-semibold">Fava UI</span>
+            <span className="font-semibold">Dazzle</span>
           </div>
           <Button
             variant="ghost"
@@ -223,7 +223,7 @@ export function Layout() {
               <Menu className="h-4 w-4" aria-hidden="true" />
             </Button>
             <div className="flex items-center text-sm text-muted-foreground">
-              <span>Fava</span>
+              <span>账本</span>
               <ChevronRight className="h-3 w-3 mx-1" />
               <span className="text-foreground font-medium">
                 {ledgerData?.options.title || 'Modern UI'}

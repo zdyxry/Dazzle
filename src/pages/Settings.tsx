@@ -92,8 +92,8 @@ export function Settings() {
           <CardTitle className="text-lg">关于</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-1">
-          <p>Fava Modern UI v0.1.0</p>
-          <p>基于 Fava API 构建的现代化记账前端</p>
+          <p>Dazzle v0.1.0</p>
+          <p>基于 Beancount/Fava 构建的现代化记账前端</p>
         </CardContent>
       </Card>
     </div>

@@ -1,6 +1,6 @@
 # Dazzle
 
-基于 Fava 后代的现代化 React 前端
+基于 Beancount/Fava 后端的现代化 React 前端
 
 ## 快速开始
 

@@ -78,7 +78,7 @@ export function PWAInstallPrompt() {
             <span className="text-primary-foreground font-bold text-lg">F</span>
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-sm">安装 Fava UI</h3>
+            <h3 className="font-semibold text-sm">安装 Dazzle</h3>
             <p className="text-xs text-muted-foreground mt-0.5">
               添加到主屏幕，离线也能使用
             </p>
