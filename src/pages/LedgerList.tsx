@@ -45,15 +45,34 @@ export function LedgerList() {
           }
         }
         
-        // 如果没有已知的账本，尝试一些常见的默认名称
+        // 如果没有已知的账本，尝试探测默认账本
         if (knownLedgers.length === 0) {
           // 尝试从环境变量或配置文件读取默认账本
           const envDefault = import.meta.env.VITE_DEFAULT_LEDGER;
           if (envDefault) {
             knownLedgers = [envDefault];
           } else {
-            // 尝试一些通用的默认名称
-            knownLedgers = ['main', 'default', 'ledger', 'primary'];
+            // 尝试通过访问探测端点来获取重定向的默认账本
+            try {
+              const response = await fetch('/api/ledgers');
+              if (response.ok) {
+                const data = await response.json();
+                if (data.location) {
+                  // 从 location 中提取 slug，例如 /huge-example-file/income_statement/
+                  const match = data.location.match(/^\/([^\/]+)\//);
+                  if (match) {
+                    knownLedgers = [match[1]];
+                  }
+                }
+              }
+            } catch {
+              // ignore
+            }
+            
+            // 如果还没有找到，尝试一些常见的默认名称
+            if (knownLedgers.length === 0) {
+              knownLedgers = ['main', 'default', 'ledger', 'primary', 'example'];
+            }
           }
         }
         

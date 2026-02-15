@@ -11,7 +11,7 @@ services:
              fava /data/example.beancount --host 0.0.0.0 --port 5111"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5111/fava/api/ledger_data"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5111/huge-example-file/income_statement/"]
       interval: 15s
       timeout: 10s
       retries: 10
