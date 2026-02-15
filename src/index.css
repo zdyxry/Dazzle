@@ -27,25 +27,41 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    /* 使用更舒适的深蓝灰色，而非纯黑 */
+    --background: 220 13% 11%;
+    --foreground: 220 13% 95%;
+    
+    /* 卡片使用稍亮的颜色，增加层次感 */
+    --card: 220 13% 14%;
+    --card-foreground: 220 13% 95%;
+    
+    --popover: 220 13% 14%;
+    --popover-foreground: 220 13% 95%;
+    
+    /* 主色调使用柔和的蓝色 */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* 次要颜色 */
+    --secondary: 220 13% 20%;
+    --secondary-foreground: 220 13% 95%;
+    
+    /* 静音颜色 */
+    --muted: 220 13% 20%;
+    --muted-foreground: 220 10% 60%;
+    
+    /* 强调色 */
+    --accent: 220 13% 20%;
+    --accent-foreground: 220 13% 95%;
+    
+    /* 错误色 */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* 边框颜色更柔和 */
+    --border: 220 13% 22%;
+    --input: 220 13% 22%;
+    --ring: 217 91% 60%;
   }
 }
 
@@ -486,13 +502,39 @@
   color: hsl(45 93% 47%);
 }
 
-/* Amount colors */
+/* 暗色模式下更柔和的状态颜色 */
+.dark .journal > li.transaction.cleared .flag {
+  color: hsl(142 71% 45%);
+}
+
+.dark .journal > li.transaction.pending .flag {
+  color: hsl(45 90% 55%);
+}
+
+/* Amount colors - 浅色模式 */
 .journal .num.positive {
   color: hsl(142 76% 36%);
 }
 
 .journal .num.negative {
   color: hsl(0 84% 60%);
+}
+
+/* Amount colors - 暗色模式（更柔和的颜色） */
+.dark .journal .num.positive {
+  color: hsl(142 71% 45%);
+}
+
+.dark .journal .num.negative {
+  color: hsl(0 84% 65%);
+}
+
+.dark .amount-positive {
+  color: hsl(142 71% 45%);
+}
+
+.dark .amount-negative {
+  color: hsl(0 84% 65%);
 }
 
 /* Account links */
@@ -616,7 +658,7 @@
 /* Dark mode support for PWA */
 @media (prefers-color-scheme: dark) {
   meta[name="theme-color"] {
-    content: "#0f172a";
+    content: "#18181b";
   }
 }
 
@@ -624,6 +666,55 @@
   meta[name="theme-color"] {
     content: "#ffffff";
   }
+}
+
+/* 暗色模式额外的视觉优化 */
+.dark {
+  /* 侧边栏使用更深的颜色 */
+  --sidebar-background: 220 13% 9%;
+  --sidebar-foreground: 220 13% 95%;
+  
+  /* 头部使用稍深的颜色 */
+  --header-background: 220 13% 12%;
+}
+
+/* 暗色模式下侧边栏样式 */
+.dark aside.bg-card {
+  background-color: hsl(var(--sidebar-background));
+}
+
+/* 暗色模式下头部样式 */
+.dark header.bg-card {
+  background-color: hsl(var(--header-background));
+}
+
+/* 暗色模式下卡片hover效果 */
+.dark .hover\:bg-muted\/50:hover {
+  background-color: hsl(220 13% 18% / 0.5);
+}
+
+.dark .hover\:bg-muted\/30:hover {
+  background-color: hsl(220 13% 18% / 0.3);
+}
+
+/* 暗色模式下边框更柔和 */
+.dark .border-border {
+  border-color: hsl(220 13% 20%);
+}
+
+/* 暗色模式下输入框背景 */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: hsl(220 13% 16%);
+  border-color: hsl(220 13% 22%);
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: hsl(217 91% 60%);
+  box-shadow: 0 0 0 2px hsl(217 91% 60% / 0.2);
 }
 
 /* Respect prefers-reduced-motion */
