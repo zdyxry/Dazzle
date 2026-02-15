@@ -91,18 +91,18 @@ function MetricCard({
     : 'bg-blue-50 dark:bg-blue-950/30';
 
   return (
-    <Card className={link ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}>
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">{title}</p>
-          <div className={cn('p-2 rounded-lg', bgClass)}>
-            <Icon className={cn('h-4 w-4', colorClass)} />
+    <Card className={cn(link ? 'cursor-pointer hover:shadow-md transition-shadow' : '', 'overflow-hidden')}>
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-xs sm:text-sm text-muted-foreground truncate">{title}</p>
+          <div className={cn('p-1.5 sm:p-2 rounded-lg shrink-0', bgClass)}>
+            <Icon className={cn('h-3.5 w-3.5 sm:h-4 sm:w-4', colorClass)} aria-hidden="true" />
           </div>
         </div>
-        <p className={cn('text-2xl font-bold mt-2 font-mono', colorClass)}>
+        <p className={cn('text-lg sm:text-2xl font-bold mt-2 font-mono tabular-nums truncate', colorClass)}>
           {formatNumber(Math.abs(value))}
         </p>
-        <p className="text-xs text-muted-foreground mt-1">{currency}</p>
+        <p className="text-xs text-muted-foreground mt-1 truncate">{currency}</p>
       </CardContent>
     </Card>
   );
@@ -1268,18 +1268,18 @@ function MonthlyAvgCard({
   const bgClass = color === 'green' ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'bg-red-50 dark:bg-red-950/30';
 
   return (
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">{title}</p>
-          <div className={cn('p-2 rounded-lg', bgClass)}>
-            <Icon className={cn('h-4 w-4', colorClass)} />
+    <Card className="overflow-hidden">
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-xs sm:text-sm text-muted-foreground truncate">{title}</p>
+          <div className={cn('p-1.5 sm:p-2 rounded-lg shrink-0', bgClass)}>
+            <Icon className={cn('h-3.5 w-3.5 sm:h-4 sm:w-4', colorClass)} aria-hidden="true" />
           </div>
         </div>
-        <p className={cn('text-2xl font-bold mt-2 font-mono', colorClass)}>
+        <p className={cn('text-lg sm:text-2xl font-bold mt-2 font-mono tabular-nums truncate', colorClass)}>
           {formatNumber(value)}
         </p>
-        <p className="text-xs text-muted-foreground mt-1">{currency}</p>
+        <p className="text-xs text-muted-foreground mt-1 truncate">{currency}</p>
       </CardContent>
     </Card>
   );
@@ -1330,13 +1330,13 @@ export function Analytics() {
   const isLoading = !assetsData || !liabilitiesData || !incomeData || !expenseData;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">财务分析</h1>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight">财务分析</h1>
         <p className="text-muted-foreground text-sm mt-1">深度分析您的财务状况</p>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-6">
+      <Tabs defaultValue="overview" className="space-y-4 sm:space-y-6">
         <TabsList className="grid w-full grid-cols-6 lg:w-fit">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <PieChart className="h-4 w-4" />
@@ -1368,7 +1368,7 @@ export function Analytics() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <MetricCard title="资产" value={assets} currency={currency} icon={Wallet} color="green" />
                 <MetricCard title="负债" value={liabilities} currency={currency} icon={TrendingDown} color="red" />
                 <MetricCard title="收入" value={income} currency={currency} icon={TrendingUp} color="green" />
@@ -1452,7 +1452,7 @@ export function Analytics() {
 
         {/* 收支 Tab */}
         <TabsContent value="expenses" className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             <MonthlyAvgCard 
               title="月均收入" 
               bql={`SELECT CONVERT(SUM(position), '${currency}') AS value WHERE ${buildBQLWhereClause("account ~ '^Income:'", filters)}`}
