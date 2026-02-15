@@ -4,13 +4,13 @@ services:
     volumes:
       - ./example.beancount:/data/example.beancount:ro
     expose:
-      - "5000"
+      - "5111"
     command: >
       sh -c "pip install fava && 
-             fava /data/example.beancount --host 0.0.0.0 --port 5000"
+             fava /data/example.beancount --host 0.0.0.0 --port 5111"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5000/fava/api/ledger_data"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5111/fava/api/ledger_data"]
       interval: 10s
       timeout: 5s
       retries: 5
