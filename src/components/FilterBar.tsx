@@ -47,9 +47,10 @@ export function FilterBar() {
               时间: {filters.time}
               <button 
                 onClick={() => handleClearSingle('time')}
-                className="ml-1 hover:text-destructive"
+                className="ml-1 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded p-0.5"
+                aria-label="清除时间筛选"
               >
-                <X className="h-3 w-3" />
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </Badge>
           )}
@@ -58,9 +59,10 @@ export function FilterBar() {
               账户: {filters.account.split(':').pop()}
               <button 
                 onClick={() => handleClearSingle('account')}
-                className="ml-1 hover:text-destructive"
+                className="ml-1 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded p-0.5"
+                aria-label="清除账户筛选"
               >
-                <X className="h-3 w-3" />
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </Badge>
           )}
@@ -70,9 +72,10 @@ export function FilterBar() {
               {filters.filter}
               <button 
                 onClick={() => handleClearSingle('filter')}
-                className="ml-1 hover:text-destructive"
+                className="ml-1 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded p-0.5"
+                aria-label="清除高级筛选"
               >
-                <X className="h-3 w-3" />
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </Badge>
           )}
@@ -97,6 +100,7 @@ export function FilterBar() {
             onChange={(e) => setTimeFilter(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
             className="h-8"
+            autoComplete="off"
           />
         </div>
 
@@ -118,6 +122,7 @@ export function FilterBar() {
             onChange={(e) => setAdvancedFilter(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
             className="h-8"
+            autoComplete="off"
           />
         </div>
 

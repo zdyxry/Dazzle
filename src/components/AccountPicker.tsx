@@ -85,8 +85,9 @@ function TreeItem({
       >
         {hasChildren ? (
           <button
-            className="p-0 h-4 w-4 shrink-0 text-muted-foreground"
+            className="p-0 h-4 w-4 shrink-0 text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
             onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }}
+            aria-label={expanded ? '收起' : '展开'}
           >
             {expanded ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
           </button>
@@ -160,13 +161,15 @@ export function AccountPicker({ accounts, value, onChange, placeholder, classNam
         type="button"
         className={cn(
           'flex h-8 w-full items-center rounded-md border border-input bg-background px-3 py-1 text-sm',
-          'ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          'ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
           !value && 'text-muted-foreground'
         )}
         onClick={() => setOpen(!open)}
         title={displayValue}
+        aria-label={value ? `已选择账户: ${displayValue}` : '选择账户'}
+        aria-expanded={open}
       >
-        <span className="truncate font-mono text-xs">
+        <span className="truncate font-mono text-xs min-w-0">
           {shortDisplay || placeholder || '选择账户...'}
         </span>
       </button>

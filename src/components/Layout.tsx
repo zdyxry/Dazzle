@@ -108,8 +108,9 @@ export function Layout() {
             size="icon"
             className="lg:hidden h-8 w-8"
             onClick={() => setSidebarOpen(false)}
+            aria-label="关闭侧边栏"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
 
@@ -217,8 +218,9 @@ export function Layout() {
               size="icon"
               className="lg:hidden mr-2 h-8 w-8"
               onClick={() => setSidebarOpen(true)}
+              aria-label="打开侧边栏"
             >
-              <Menu className="h-4 w-4" />
+              <Menu className="h-4 w-4" aria-hidden="true" />
             </Button>
             <div className="flex items-center text-sm text-muted-foreground">
               <span>Fava</span>

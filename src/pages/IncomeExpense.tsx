@@ -45,13 +45,13 @@ export function IncomeExpense() {
   const expenseTree = data.trees[2]; // Expenses
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">收支分析</h1>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight">收支分析</h1>
         <p className="text-muted-foreground text-sm mt-1">收入与支出趋势分析</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
         {netProfitChart && (
           <Card>
             <CardHeader className="pb-2">
@@ -98,11 +98,11 @@ export function IncomeExpense() {
       </div>
 
       {incomeTree && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">收入明细</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="px-3 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">收入明细</CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-0 overflow-x-auto">
             <AccountTreeTable
               data={[incomeTree]}
               currencies={[currency]}
@@ -114,11 +114,11 @@ export function IncomeExpense() {
       )}
 
       {expenseTree && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">支出明细</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="px-3 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">支出明细</CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-0 overflow-x-auto">
             <AccountTreeTable
               data={[expenseTree]}
               currencies={[currency]}

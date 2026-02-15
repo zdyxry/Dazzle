@@ -507,17 +507,6 @@
 
 /* Touch-friendly styles */
 @layer base {
-  /* Minimum touch target size (44x44px) */
-  button,
-  [role="button"],
-  a,
-  input,
-  select,
-  textarea {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
   /* Remove tap highlight on mobile */
   * {
     -webkit-tap-highlight-color: transparent;
@@ -538,16 +527,21 @@
   }
 }
 
-/* Mobile-specific optimizations */
-@media (max-width: 768px) {
-  /* Larger touch targets on mobile */
-  button,
-  [role="button"],
-  .btn {
-    min-height: 48px;
-    min-width: 48px;
+/* Minimum touch target size (44x44px) - 仅针对交互元素 */
+@layer components {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
   }
   
+  .touch-target-sm {
+    min-height: 32px;
+    min-width: 32px;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
   /* Increase font size for better readability */
   body {
     font-size: 16px; /* Prevents iOS zoom on input focus */
@@ -562,22 +556,41 @@
   /* Journal table mobile adjustments */
   .journal > li > p {
     flex-wrap: wrap;
+    gap: 0.25rem;
   }
 
   .journal .description {
     order: 1;
     width: 100%;
     flex: none;
+    min-width: 0;
   }
 
   .journal .num {
     width: auto;
-    min-width: 6rem;
+    min-width: 5rem;
+    font-size: 0.75rem;
+  }
+  
+  .journal .datecell {
+    width: auto;
+    min-width: 5rem;
+    font-size: 0.7rem;
+  }
+  
+  .journal .flag {
+    width: auto;
+    min-width: 1.5rem;
   }
   
   /* Improve table scrolling on mobile */
   .overflow-x-auto {
     -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Safe area insets for mobile */
+  .mobile-safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
 }
 
@@ -610,5 +623,38 @@
 @media (prefers-color-scheme: light) {
   meta[name="theme-color"] {
     content: "#ffffff";
+  }
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom scrollbar styling */
+@layer base {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
   }
 }

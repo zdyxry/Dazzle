@@ -46,22 +46,23 @@ function TreeRow({ node, currencies, primaryCurrency, level, onAccountClick }: T
               size="icon"
               className="h-6 w-6 mr-2 shrink-0"
               onClick={() => setIsExpanded(!isExpanded)}
+              aria-label={isExpanded ? '收起子账户' : '展开子账户'}
             >
               {isExpanded ? (
-                <ChevronDown className="h-4 w-4" />
+                <ChevronDown className="h-4 w-4" aria-hidden="true" />
               ) : (
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
               )}
             </Button>
           ) : (
-            <span className="w-6 mr-2 shrink-0" />
+            <span className="w-6 mr-2 shrink-0" aria-hidden="true" />
           )}
           <button
             onClick={() => onAccountClick?.(node.account)}
-            className="text-left hover:text-primary hover:underline truncate"
+            className="text-left hover:text-primary hover:underline truncate min-w-0"
             title={node.account}
           >
-            <span className="font-medium">{getShortAccountName(node.account)}</span>
+            <span className="font-medium truncate">{getShortAccountName(node.account)}</span>
             {level === 0 && (
               <span className="text-muted-foreground ml-2 text-sm">
                 ({node.account.split(':')[0]})
@@ -116,11 +117,19 @@ export function AccountTreeTable({
 }: AccountTreeTableProps) {
   const currency = primaryCurrency || currencies[0] || 'CNY';
   
+  if (!data || data.length === 0) {
+    return (
+      <div className="border rounded-lg p-8 text-center text-muted-foreground">
+        <p>暂无账户数据</p>
+      </div>
+    );
+  }
+  
   return (
     <div className="border rounded-lg overflow-hidden">
       {/* 表头 */}
       <div className="flex items-center py-3 px-4 bg-muted font-medium text-sm border-b">
-        <div className="flex-1">账户</div>
+        <div className="flex-1 min-w-0">账户</div>
         <div className="flex items-center gap-8 shrink-0">
           <div className="text-right w-32 text-muted-foreground">直接余额</div>
           <div className="text-right w-32 text-muted-foreground">

@@ -91,17 +91,17 @@ export function Dashboard() {
       </div>
 
       {/* Metric cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {metrics.map((m) => (
-          <Card key={m.label}>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">{m.label}</p>
-                <div className={cn('p-2 rounded-lg', m.bgColor)}>
-                  <m.icon className={cn('h-4 w-4', m.color)} />
+          <Card key={m.label} className="overflow-hidden">
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-xs sm:text-sm text-muted-foreground truncate">{m.label}</p>
+                <div className={cn('p-1.5 sm:p-2 rounded-lg shrink-0', m.bgColor)}>
+                  <m.icon className={cn('h-3.5 w-3.5 sm:h-4 sm:w-4', m.color)} aria-hidden="true" />
                 </div>
               </div>
-              <p className={cn('text-xl font-bold mt-2 font-mono', m.color)}>
+              <p className={cn('text-lg sm:text-xl font-bold mt-2 font-mono tabular-nums', m.color)}>
                 {m.value}
               </p>
               <p className="text-xs text-muted-foreground mt-1">{m.currency}</p>
@@ -111,7 +111,7 @@ export function Dashboard() {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
         {/* Net worth trend */}
         {netWorthChart && (
           <Card>

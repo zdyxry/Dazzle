@@ -12,11 +12,19 @@ export function useTheme() {
     const root = document.documentElement;
 
     const applyTheme = (t: Theme) => {
-      if (t === 'system') {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        root.classList.toggle('dark', prefersDark);
-      } else {
-        root.classList.toggle('dark', t === 'dark');
+      const isDark = t === 'system' 
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches 
+        : t === 'dark';
+      
+      root.classList.toggle('dark', isDark);
+      
+      // 设置 color-scheme 以支持原生表单元素
+      root.style.colorScheme = isDark ? 'dark' : 'light';
+      
+      // 更新 theme-color meta 标签
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (metaThemeColor) {
+        metaThemeColor.setAttribute('content', isDark ? '#0f172a' : '#ffffff');
       }
     };
 

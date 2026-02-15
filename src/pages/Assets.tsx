@@ -46,15 +46,15 @@ export function Assets() {
   const equity = data.trees.filter(t => t.account === ledgerData?.options.name_equity);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">资产总览</h1>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight">资产总览</h1>
         <p className="text-muted-foreground text-sm mt-1">查看资产、负债和净资产状况</p>
       </div>
 
       {netWorthChart && (
-        <Card>
-          <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+        <Card className="overflow-hidden">
+          <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0 gap-2">
             <CardTitle className="text-base font-medium">走势图</CardTitle>
             <div className="flex items-center gap-1">
               <Button
@@ -87,11 +87,11 @@ export function Assets() {
       )}
 
       {assets.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">资产</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="px-3 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">资产</CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-0 overflow-x-auto">
             <AccountTreeTable
               data={assets}
               currencies={[currency]}
@@ -103,11 +103,11 @@ export function Assets() {
       )}
 
       {liabilities.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">负债</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="px-3 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">负债</CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-0 overflow-x-auto">
             <AccountTreeTable
               data={liabilities}
               currencies={[currency]}
@@ -119,11 +119,11 @@ export function Assets() {
       )}
 
       {equity.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">权益</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="px-3 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">权益</CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-0 overflow-x-auto">
             <AccountTreeTable
               data={equity}
               currencies={[currency]}

@@ -14,8 +14,14 @@ export function ThemeToggle() {
   const Icon = theme === 'dark' ? Moon : theme === 'light' ? Sun : Monitor;
 
   return (
-    <Button variant="ghost" size="icon" onClick={next} title={`当前: ${theme}`}>
-      <Icon className="h-4 w-4" />
+    <Button 
+      variant="ghost" 
+      size="icon" 
+      onClick={next} 
+      title={`当前: ${theme}`}
+      aria-label={`切换主题，当前: ${theme === 'light' ? '浅色' : theme === 'dark' ? '深色' : '跟随系统'}`}
+    >
+      <Icon className="h-4 w-4" aria-hidden="true" />
     </Button>
   );
 }
