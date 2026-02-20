@@ -6,8 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Plus, X, Check, Clock } from 'lucide-react';
+import { Loader2, Plus, X, Check, Clock, Bot, Send, ArrowDown, AlertTriangle } from 'lucide-react';
 import { AccountPicker } from '@/components/AccountPicker';
+import { useAIStore } from '@/stores/ai';
+import { parseNaturalEntry, validateParsedEntry } from '@/lib/ai';
+import type { ValidationResult } from '@/lib/ai';
 
 interface Posting {
   account: string;
@@ -78,6 +81,12 @@ export function QuickEntry() {
   const [showPayeeDropdown, setShowPayeeDropdown] = useState(false);
   const [success, setSuccess] = useState(false);
   const [recentAccounts, setRecentAccounts] = useState<string[]>(getRecentAccounts);
+
+  const { isConfigured, getEffectiveConfig } = useAIStore();
+  const [aiInput, setAiInput] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [aiResult, setAiResult] = useState<ValidationResult | null>(null);
 
   const { data: payeeAccounts } = useQuery({
     queryKey: ['payeeAccounts', payee],
@@ -162,6 +171,39 @@ export function QuickEntry() {
     mutation.mutate(entry);
   };
 
+  const handleAIParse = async () => {
+    if (!aiInput.trim() || !ledgerData) return;
+    setAiLoading(true);
+    setAiError(null);
+    setAiResult(null);
+    try {
+      const config = getEffectiveConfig();
+      const parsed = await parseNaturalEntry(aiInput, ledgerData, config);
+      const result = validateParsedEntry(parsed, ledgerData);
+      setAiResult(result);
+    } catch (err) {
+      setAiError(err instanceof Error ? err.message : 'AI 解析失败');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const handleFillForm = () => {
+    if (!aiResult) return;
+    const { entry } = aiResult;
+    setDate(entry.date);
+    setPayee(entry.payee || '');
+    setNarration(entry.narration);
+    setSelectedTags(entry.tags);
+    setPostings(entry.postings.map(p => ({
+      account: p.account,
+      amount: p.amount,
+      currency: p.currency || currency,
+    })));
+    setAiResult(null);
+    setAiInput('');
+  };
+
   const filteredPayees = payeeSearch
     ? payees.filter(p => p.toLowerCase().includes(payeeSearch.toLowerCase())).slice(0, 10)
     : [];
@@ -182,6 +224,110 @@ export function QuickEntry() {
           <Check className="h-4 w-4" />
           记账成功
         </div>
+      )}
+
+      {isConfigured() && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Bot className="h-5 w-5" />
+              AI 快速记账
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex gap-2">
+              <Input
+                placeholder="用自然语言描述交易，例如：昨天在星巴克花了38元买咖啡"
+                value={aiInput}
+                onChange={(e) => setAiInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAIParse()}
+                className="flex-1"
+                disabled={aiLoading}
+              />
+              <Button onClick={handleAIParse} disabled={aiLoading || !aiInput.trim()} size="icon">
+                {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              </Button>
+            </div>
+
+            {aiLoading && (
+              <div className="flex items-center justify-center gap-2 py-6 text-muted-foreground text-sm">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                AI 正在解析中…
+              </div>
+            )}
+
+            {aiError && (
+              <p className="text-sm text-destructive">{aiError}</p>
+            )}
+
+            {!aiLoading && aiResult && (
+              <div className="space-y-3">
+                {/* Warnings */}
+                {aiResult.warnings.length > 0 && (
+                  <div className="space-y-1">
+                    {aiResult.warnings.map((w, i) => (
+                      <div key={i} className="flex items-start gap-2 text-xs text-amber-600 dark:text-amber-400">
+                        <AlertTriangle className="h-3 w-3 mt-0.5 shrink-0" />
+                        {w}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Errors */}
+                {aiResult.errors.length > 0 && (
+                  <div className="space-y-1">
+                    {aiResult.errors.map((e, i) => (
+                      <p key={i} className="text-xs text-destructive">{e}</p>
+                    ))}
+                  </div>
+                )}
+
+                {/* Preview */}
+                <div className="rounded-md border bg-muted/30 p-3 text-sm space-y-1">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">日期</span>
+                    <span>{aiResult.entry.date}</span>
+                  </div>
+                  {aiResult.entry.payee && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">收款方</span>
+                      <span>{aiResult.entry.payee}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">描述</span>
+                    <span>{aiResult.entry.narration}</span>
+                  </div>
+                  {aiResult.entry.tags.length > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">标签</span>
+                      <span>{aiResult.entry.tags.map(t => `#${t}`).join(' ')}</span>
+                    </div>
+                  )}
+                  <div className="h-px bg-border my-2" />
+                  {aiResult.entry.postings.map((p, i) => (
+                    <div key={i} className="flex justify-between font-mono text-xs">
+                      <span>{p.account}</span>
+                      <span>{p.amount ? `${p.amount} ${p.currency}` : '(自动)'}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-2">
+                  <Button onClick={handleFillForm} disabled={!aiResult.valid} className="flex-1 gap-2">
+                    <ArrowDown className="h-4 w-4" />
+                    填入表单
+                  </Button>
+                  <Button variant="outline" onClick={handleAIParse}>
+                    重新解析
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       )}
 
       <Card>

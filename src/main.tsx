@@ -29,6 +29,7 @@ import { QuickEntry } from './pages/QuickEntry'
 import { AccountDetail } from './pages/AccountDetail'
 import { Settings } from './pages/Settings'
 import { Analytics } from './pages/Analytics'
+import { SmartQuery } from './pages/SmartQuery'
 import { LedgerList } from './pages/LedgerList'
 
 const queryClient = new QueryClient({
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
       {
         path: 'analytics',
         element: <Analytics />,
+      },
+      {
+        path: 'smart-query',
+        element: <SmartQuery />,
       },
     ],
   },

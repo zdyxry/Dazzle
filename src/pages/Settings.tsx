@@ -1,20 +1,55 @@
+import { useState } from 'react';
 import { useLedgerStore } from '@/stores/ledger';
+import { useAIStore, ENV_DEFAULTS } from '@/stores/ai';
+import { chatCompletion } from '@/lib/ai';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
-import { Sun, Moon, Monitor } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Sun, Moon, Monitor, Eye, EyeOff, Loader2 } from 'lucide-react';
 
 
 export function Settings() {
   const ledgerData = useLedgerStore((state) => state.ledgerData);
   const { theme, setTheme } = useTheme();
+  const { config, setConfig, getEffectiveConfig } = useAIStore();
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [testStatus, setTestStatus] = useState<{
+    state: 'idle' | 'loading' | 'success' | 'error';
+    message?: string;
+  }>({ state: 'idle' });
 
   const themes = [
     { value: 'light' as const, label: '浅色', icon: Sun },
     { value: 'dark' as const, label: '深色', icon: Moon },
     { value: 'system' as const, label: '跟随系统', icon: Monitor },
   ];
+
+  const handleTestConnection = async () => {
+    setTestStatus({ state: 'loading' });
+    try {
+      const effective = getEffectiveConfig();
+      await chatCompletion(
+        [{ role: 'user', content: 'Hello' }],
+        effective,
+      );
+      setTestStatus({ state: 'success', message: '连接成功' });
+    } catch (e) {
+      setTestStatus({
+        state: 'error',
+        message: e instanceof Error ? e.message : '连接失败',
+      });
+    }
+  };
+
+  const effective = getEffectiveConfig();
+
+  function configSource(field: keyof typeof ENV_DEFAULTS) {
+    if (config[field]) return '用户设置';
+    if (ENV_DEFAULTS[field]) return '环境变量';
+    return '内置默认';
+  }
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -41,6 +76,95 @@ export function Settings() {
                 {t.label}
               </Button>
             ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">AI 配置</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">API Key *</label>
+            <div className="flex gap-2">
+              <Input
+                type={showApiKey ? 'text' : 'password'}
+                value={config.apiKey}
+                onChange={(e) => setConfig({ apiKey: e.target.value })}
+                placeholder="sk-..."
+              />
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowApiKey(!showApiKey)}
+              >
+                {showApiKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Base URL</label>
+            <Input
+              value={config.baseUrl}
+              onChange={(e) => setConfig({ baseUrl: e.target.value })}
+              placeholder={ENV_DEFAULTS.baseUrl}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Model</label>
+            <Input
+              value={config.model}
+              onChange={(e) => setConfig({ model: e.target.value })}
+              placeholder={ENV_DEFAULTS.model}
+            />
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleTestConnection}
+              disabled={testStatus.state === 'loading'}
+            >
+              {testStatus.state === 'loading' && (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              )}
+              测试连接
+            </Button>
+            {testStatus.state === 'success' && (
+              <span className="text-sm text-green-600 dark:text-green-400">{testStatus.message}</span>
+            )}
+            {testStatus.state === 'error' && (
+              <span className="text-sm text-destructive">{testStatus.message}</span>
+            )}
+          </div>
+
+          <div className="rounded-md border p-3 space-y-2">
+            <p className="text-sm font-medium">当前生效配置</p>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">API Key</span>
+              <span>
+                {effective.apiKey ? '••••••' + effective.apiKey.slice(-4) : '未配置'}
+                <Badge variant="secondary" className="text-xs ml-2">{configSource('apiKey')}</Badge>
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Base URL</span>
+              <span>
+                {effective.baseUrl}
+                <Badge variant="secondary" className="text-xs ml-2">{configSource('baseUrl')}</Badge>
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Model</span>
+              <span>
+                {effective.model}
+                <Badge variant="secondary" className="text-xs ml-2">{configSource('model')}</Badge>
+              </span>
+            </div>
           </div>
         </CardContent>
       </Card>

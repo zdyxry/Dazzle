@@ -7,6 +7,7 @@ import {
   BookOpen,
   Tag,
   PenSquare,
+  Sparkles,
   Settings,
   Menu,
   X,
@@ -38,6 +39,7 @@ const navItems = [
   { path: 'journal', label: '交易流水', icon: BookOpen },
   { path: 'tags', label: '标签分析', icon: Tag },
   { path: 'entry', label: '快速记账', icon: PenSquare },
+  { path: 'smart-query', label: '智能查询', icon: Sparkles },
 ];
 
 export function Layout() {

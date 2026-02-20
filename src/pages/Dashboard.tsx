@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { NetWorthChart, MonthlyBarChart, CategoryPieChart } from '@/components/charts';
 import { Loader2, TrendingUp, TrendingDown, Wallet, PiggyBank } from 'lucide-react';
 import { cn, formatNumber } from '@/lib/utils';
+import { AIInsightCard } from '@/components/AIInsightCard';
+import type { FinancialSummary } from '@/lib/ai';
 import type { AccountTreeNode, BalancesChartData, BarChartData } from '@/types';
 
 function getTreeTotal(node: AccountTreeNode, currency: string): number {
@@ -47,6 +49,40 @@ export function Dashboard() {
   const netWorthChart = balanceSheet?.charts.find(c => c.type === 'balances') as BalancesChartData | undefined;
   const netProfitChart = incomeStatement?.charts.find(c => c.type === 'bar') as BarChartData | undefined;
   const expenseTree = incomeStatement?.trees[2]; // Expenses tree node
+
+  // Build financial summary for AI insight card
+  const monthlyTrend: FinancialSummary['monthlyTrend'] = [];
+  if (netProfitChart) {
+    for (const item of netProfitChart.data.slice(-6)) {
+      const income = Object.values(item.balance).reduce((s, v) => s + Math.abs(Math.min(v, 0)), 0);
+      const expense = Object.values(item.balance).reduce((s, v) => s + Math.max(v, 0), 0);
+      monthlyTrend.push({ month: item.date, income, expense });
+    }
+  }
+
+  const topExpenseCategories: FinancialSummary['topExpenseCategories'] = [];
+  if (expenseTree) {
+    for (const child of expenseTree.children) {
+      const amount = (child.balance[currency] || 0) + (child.balance_children[currency] || 0);
+      if (amount > 0) {
+        topExpenseCategories.push({ category: child.account, amount });
+      }
+    }
+    topExpenseCategories.sort((a, b) => b.amount - a.amount);
+    topExpenseCategories.splice(5);
+  }
+
+  const financialSummary: FinancialSummary = {
+    netWorth,
+    totalAssets: assetsTotal,
+    totalLiabilities: liabilitiesTotal,
+    totalIncome: incomeTotal,
+    totalExpenses: expenseTotal,
+    surplus,
+    currency,
+    monthlyTrend,
+    topExpenseCategories,
+  };
 
   const metrics = [
     {
@@ -109,6 +145,9 @@ export function Dashboard() {
           </Card>
         ))}
       </div>
+
+      {/* AI Insight */}
+      <AIInsightCard financialData={financialSummary} />
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
