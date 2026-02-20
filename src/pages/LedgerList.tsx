@@ -52,26 +52,25 @@ export function LedgerList() {
           if (envDefault) {
             knownLedgers = [envDefault];
           } else {
-            // 尝试通过访问探测端点来获取重定向的默认账本
+            // 尝试通过访问 fava 根路径来获取重定向的默认账本
+            // Fava 会重定向到 /{ledger-slug}/，我们利用这个特性来探测
             try {
-              const response = await fetch('/api/ledgers');
-              if (response.ok) {
-                const data = await response.json();
-                if (data.location) {
-                  // 从 location 中提取 slug，例如 /huge-example-file/income_statement/
-                  const match = data.location.match(/^\/([^\/]+)\//);
-                  if (match) {
-                    knownLedgers = [match[1]];
-                  }
-                }
+              // 使用代理路径访问 fava 根路径，允许自动跟随重定向
+              const response = await fetch('/api/ledgers/detect');
+              // 从最终 URL 中提取账本 slug
+              const finalUrl = response.url;
+              // 例如: http://localhost:5173/huge-example-file/income_statement/
+              const match = finalUrl.match(/\/([^\/]+)\/(?:income_statement\/)?$/);
+              if (match && match[1] !== 'api' && match[1] !== 'ledgers') {
+                knownLedgers = [match[1]];
               }
-            } catch {
-              // ignore
+            } catch (e) {
+              console.log('Ledger detection failed:', e);
             }
             
             // 如果还没有找到，尝试一些常见的默认名称
             if (knownLedgers.length === 0) {
-              knownLedgers = ['main', 'default', 'ledger', 'primary', 'example'];
+              knownLedgers = ['main', 'default', 'ledger', 'primary', 'example', 'huge-example-file'];
             }
           }
         }
@@ -119,6 +118,13 @@ export function LedgerList() {
         }
         
         if (ledgerInfos.length === 0) {
+          // 如果 localStorage 中的账本都无效，清除并重新探测
+          if (savedLedgers) {
+            localStorage.removeItem('fava_ledgers');
+            // 重新加载页面以重新探测
+            window.location.reload();
+            return;
+          }
           setError('无法发现可用的账本。请确保 Fava 服务正在运行，并且至少有一个账本已加载。');
         } else {
           setLedgers(ledgerInfos);

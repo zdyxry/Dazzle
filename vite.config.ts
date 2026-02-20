@@ -144,11 +144,30 @@ export default defineConfig({
     host: '0.0.0.0',
     cors: true,
     proxy: {
-      '^/.*\/api\/': {
-        target: 'http://127.0.0.1:5001',
+      // 账本探测端点 - 代理到 fava 根路径以获取重定向（优先匹配）
+      '/api/ledgers/detect': {
+        target: process.env.VITE_FAVA_URL || 'http://127.0.0.1:5001',
         changeOrigin: true,
         secure: false,
+        rewrite: () => '',
       },
+      // Fava API 代理 - 所有 /{ledger}/api/ 路径（包括中文）
+      // 使用函数方式处理，支持任意字符的账本名
+      '^/.*\/api\/': {
+        target: process.env.VITE_FAVA_URL || 'http://127.0.0.1:5001',
+        changeOrigin: true,
+        secure: false,
+        bypass: (req) => {
+          // 跳过 /api/ledgers/detect，避免与上面的规则冲突
+          if (req.url === '/api/ledgers/detect') {
+            return req.url;
+          }
+        },
+      },
+    },
+    watch: {
+      usePolling: true,
+      interval: 100,
     },
   },
 })

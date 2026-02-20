@@ -89,7 +89,7 @@ export function Layout() {
   usePollChanges(5000);
 
   return (
-    <div className="min-h-screen flex bg-background">
+    <div className="h-screen flex bg-background overflow-hidden">
       {/* Sidebar */}
       <aside
         className={cn(
@@ -97,8 +97,8 @@ export function Layout() {
           !sidebarOpen && '-translate-x-full lg:hidden'
         )}
       >
-        {/* Logo */}
-        <div className="flex items-center justify-between h-14 px-4 border-b">
+        {/* Logo - 固定高度不压缩 */}
+        <div className="flex items-center justify-between h-14 px-4 border-b shrink-0">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">F</span>
@@ -116,8 +116,8 @@ export function Layout() {
           </Button>
         </div>
 
-        {/* Ledger selector */}
-        <div className="px-3 py-3 border-b">
+        {/* Ledger selector - 固定高度不压缩 */}
+        <div className="px-3 py-3 border-b shrink-0">
           <p className="text-xs text-muted-foreground mb-1.5">当前账本</p>
           {isLoading ? (
             <p className="text-sm font-medium truncate">加载中...</p>
@@ -153,8 +153,8 @@ export function Layout() {
           )}
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
+        {/* Nav - 可滚动区域 */}
+        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto min-h-0">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
@@ -178,8 +178,8 @@ export function Layout() {
           ))}
         </nav>
 
-        {/* Bottom */}
-        <div className="p-3 border-t space-y-2">
+        {/* Bottom - 固定在底部不压缩 */}
+        <div className="p-3 border-t space-y-2 shrink-0">
           {ledgerData && ledgerData.errors.length > 0 && (
             <Badge variant="destructive" className="w-full justify-center text-xs">
               {ledgerData.errors.length} 个错误

@@ -1,7 +1,21 @@
 # AGENTS.md — Dazzle
 
 ## Build & Dev Commands
+
+### 本地开发（推荐）
 - `npm run dev` — Start Vite dev server (port 5173, proxies `/*/api/*` to backend at `127.0.0.1:5001`)
+  - 需要本地先启动 fava: `fava example.beancount`
+  - 支持热重载 (HMR)
+
+### Docker 开发（无需本地 Node.js）
+- `./scripts/dev-docker.sh` — 启动完整的 Docker 开发环境
+  - Fava 后端使用预构建镜像（无需每次重新安装）
+  - 前端支持热重载，代码修改实时生效
+  - 无需 nginx，Vite 直接提供开发服务
+  - 访问 http://localhost:5173
+- `docker compose -f docker/docker-compose.dev.yml down` — 停止开发环境
+
+### 生产构建
 - `npm run build` — Type-check with `tsc` then build with Vite
 - `npm run lint` — ESLint for `.ts`/`.tsx` files (zero warnings enforced)
 - No test framework is configured.

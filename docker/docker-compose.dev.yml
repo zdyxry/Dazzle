@@ -1,0 +1,41 @@
+# 开发环境配置 - 支持热重载，无需 nginx
+services:
+  fava:
+    build:
+      context: .
+      dockerfile: Dockerfile.fava
+    volumes:
+      - ./example.beancount:/data/example.beancount:ro
+    ports:
+      - "5001:5001"
+    environment:
+      - FAVA_HOST=0.0.0.0
+      - FAVA_PORT=5001
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5001/huge-example-file/income_statement/"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  ui:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ../:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - VITE_DEV_SERVER_HOST=0.0.0.0
+      - VITE_FAVA_URL=http://fava:5001
+      - WATCHPACK_POLLING=true
+    command: >
+      sh -c "npm install && npm run dev"
+    depends_on:
+      fava:
+        condition: service_healthy
+    restart: unless-stopped
